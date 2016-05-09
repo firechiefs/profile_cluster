@@ -1,0 +1,38 @@
+<%- | String $success_color, String $error_color, String $validation_data | -%>
+
+# success color
+$ConsoleSuccess = "<%= $success_color %>"
+# error color
+$ConsoleError   = "<%= $error_color %>"
+# cluster short name
+$ClusterName    = "<%= $validation_data %>"
+
+# Check if cluster exists
+Try
+{
+    # grab cluster name. if name not found, stop and catch exception
+    $Cluster = Get-Cluster -Name $ClusterName -ErrorAction Stop
+
+    # cluster found. write results
+    write-host "PASS: PROFILE_CLUSTER", $ClusterName, "exists" -ForegroundColor $consoleSuccess
+}
+Catch
+{
+    # cluster not found. write results
+    write-host "FAIL: PROFILE_CLUSTER", $ClusterName, "does not exist" -ForegroundColor $consoleError
+}
+
+# Check if nodes are part of cluster
+Try
+{
+    # grab cluster nodes. if node not found, stop and catch exception
+    $ClusterNode = Get-ClusterNode -Cluster $ClusterName -Name <%= $::hostname %> -ErrorAction Stop
+
+    # node in cluster. write results
+    write-host "PASS: PROFILE_CLUSTER", $ClusterNode.Name, "exists. ID =", $ClusterNode.ID, "State = ", $ClusterNode.State -ForegroundColor $consoleSuccess
+}
+Catch
+{
+    # node not found in cluster. write results.
+    write-host "FAIL: PROFILE_CLUSTER <%= $::hostname %> not found in cluster", $ClusterName -ForegroundColor $consoleError
+}
