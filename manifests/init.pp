@@ -53,7 +53,7 @@
 
 class profile_cluster {
   # HIERA lOOKUP
-  $cfg = hiera('profile::cluster::cfg')
+  $cfg = hiera_hash('profile::cluster::cfg')
 
   # Name of the cluster
   $dsc_name                          = $cfg[dsc_name]
