@@ -52,6 +52,9 @@
 # puppet module install puppetlabs-dsc
 
 class profile_cluster {
+  # requires windows features
+  require profile_windowsfeatures
+
   # HIERA lOOKUP
   $cfg = hiera_hash('profile::cluster::cfg')
 
